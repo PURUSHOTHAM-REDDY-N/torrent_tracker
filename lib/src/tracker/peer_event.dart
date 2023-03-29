@@ -9,7 +9,7 @@ class PeerEvent extends TrackerEventBase {
   /// - [START]
   /// - [COMPLETE]
   /// - [STOPPED]
-  String eventType;
+  String? eventType;
 
   /// Server host url
   final Uri serverHost;
@@ -21,27 +21,27 @@ class PeerEvent extends TrackerEventBase {
   int complete;
 
   /// total number of times the tracker has registered a completion
-  int downloaded;
+  int downloaded = 0;
 
   /// number of non-seeder peers, aka "leechers"
-  int incomplete;
+  int incomplete = 0 ;
 
   /// Interval in seconds that the client should wait between sending regular requests to the tracker
-  int interval;
+  int? interval;
 
   /// Minimum announce interval. If present clients must not reannounce more frequently than this.
-  int minInterval;
+  int? minInterval;
 
   /// Similar to failure reason, but the response still gets processed normally. The warning message is shown just like an error.
-  String warning;
+  String? warning;
 
   /// peer uri set
   Set<CompactAddress> peers = <CompactAddress>{};
 
   PeerEvent(this.infoHash, this.serverHost,
-      {this.complete,
-      this.incomplete,
-      this.interval,
+      {this.complete=0,
+      this.incomplete=0,
+      this.interval=0,
       this.minInterval,
       this.warning});
 

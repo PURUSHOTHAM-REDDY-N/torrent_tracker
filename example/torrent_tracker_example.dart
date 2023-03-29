@@ -39,7 +39,7 @@ void main() async {
       // source.dispose();
     });
     findPublicTrackers().listen((urls) {
-      torrentTracker.runTrackers(urls, torrent.infoHashBuffer);
+      torrentTracker.runTrackers(urls, torrent.infoHashBuffer!);
     });
 
     // Timer(Duration(seconds: 120), () async {
@@ -62,7 +62,7 @@ class SimpleProvider implements AnnounceOptionsProvider {
   SimpleProvider(this.torrent, this.peerId, this.port);
   String peerId;
   int port;
-  String infoHash;
+  String? infoHash;
   Torrent torrent;
   int compact = 1;
   int numwant = 50;

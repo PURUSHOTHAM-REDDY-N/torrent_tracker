@@ -27,19 +27,19 @@ mixin UDPTrackerBase {
   /// UDP 套接字。
   ///
   /// 基本上一次连接-响应过后就会被关闭。第二次连接再创建新的
-  RawDatagramSocket _socket;
+  RawDatagramSocket? _socket;
 
   /// 会话ID。长度为4的一组bytebuffer，随机生成的
-  List<int> _transcationId;
+  List<int>? _transcationId;
 
   /// 连接ID。在第一次发送消息到remote后，remote会返回一个connection id，第二次发送消息
   /// 需要携带该ID
-  Uint8List _connectionId;
+  Uint8List? _connectionId;
 
   /// 远程URL
   // Uri get uri;
 
-  Future<List<CompactAddress>> get addresses;
+  Future<List<CompactAddress>?> get addresses;
 
   bool _closed = false;
 
@@ -48,7 +48,7 @@ mixin UDPTrackerBase {
   /// 获取当前transcation id，如果有就返回，表示当前通信还未完结。如果没有就重新生成
   List<int> get transcationId {
     _transcationId ??= _generateTranscationId();
-    return _transcationId;
+    return _transcationId!;
   }
 
   /// 将trancation id 转成数字
@@ -89,7 +89,7 @@ mixin UDPTrackerBase {
   }
 
   /// 和Remote通信的入口函数。返回一个Future
-  Future<T> contactAnnouncer<T>(Map options) async {
+  Future<T?> contactAnnouncer<T>(Map options) async {
     if (isClosed) return null;
     var completer = Completer<T>();
     var adds = await addresses;
@@ -102,9 +102,9 @@ mixin UDPTrackerBase {
     }
     _socket?.close();
     _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-    _socket.listen((event) async {
+    _socket?.listen((event) async {
       if (event == RawSocketEvent.read) {
-        var datagram = _socket.receive();
+        var datagram = _socket?.receive();
         if (datagram == null || datagram.data.length < 8) {
           await close();
           completer.completeError('Wrong datas');
@@ -145,7 +145,7 @@ mixin UDPTrackerBase {
   void _announce(Uint8List connectionId, Map options,
       List<CompactAddress> addresses) async {
     var message = generateSecondTouchMessage(connectionId, options);
-    if (message == null || message.isEmpty) {
+    if (message.isEmpty) {
       throw '发送数据不能为空';
     } else {
       _sendMessage(message, addresses);
@@ -169,7 +169,7 @@ mixin UDPTrackerBase {
       // 表明连接成功，可以进行announce
       if (action == 0) {
         _connectionId = data.sublist(8, 16); // 返回信息的第8-16位是下次连接的connection id
-        await _announce(_connectionId, options, address); // 继续，不要停
+        _announce(_connectionId!, options, address); // 继续，不要停
         return;
       }
       // 发生错误
@@ -203,7 +203,7 @@ mixin UDPTrackerBase {
   }
 
   /// 关闭连接以及清楚设置
-  Future close() {
+  Future? close() {
     _closed = true;
     _socket?.close();
     _socket = null;

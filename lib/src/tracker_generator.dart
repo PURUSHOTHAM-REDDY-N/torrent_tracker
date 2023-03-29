@@ -4,7 +4,7 @@ import '../torrent_tracker.dart';
 import 'tracker/tracker.dart';
 
 abstract class TrackerGenerator {
-  Tracker createTracker(
+  Tracker? createTracker(
       Uri announce, Uint8List infoHashBuffer, AnnounceOptionsProvider provider);
 
   factory TrackerGenerator.base() {
@@ -14,7 +14,7 @@ abstract class TrackerGenerator {
 
 class BaseTrackerGenerator implements TrackerGenerator {
   @override
-  Tracker createTracker(Uri announce, Uint8List infoHashBuffer,
+  Tracker? createTracker(Uri announce, Uint8List infoHashBuffer,
       AnnounceOptionsProvider provider) {
     if (announce.isScheme('http') || announce.isScheme('https')) {
       return HttpTracker(announce, infoHashBuffer, provider: provider);

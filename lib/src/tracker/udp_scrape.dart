@@ -68,7 +68,7 @@ class UDPScrape extends Scrape with UDPTrackerBase {
   }
 
   @override
-  Future<List<CompactAddress>> get addresses async {
+  Future<List<CompactAddress>?> get addresses async {
     try {
       var ips = await InternetAddress.lookup(scrapeUrl.host);
       var l = <CompactAddress>[];
