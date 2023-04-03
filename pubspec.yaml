@@ -10,15 +10,12 @@ environment:
 
 dependencies:
   dartorrent_common:
-    git:
-      url: https://github.com/xhns/dartorrent_common.git
+    path: ../dartorrent_common
   bencode_dart:
-    git:
-      url: https://github.com/xhns/bencode_dart.git
+    path: ../bencode_dart
 
 dev_dependencies:
   pedantic: ^1.9.0
   test: ^1.14.4
   torrent_model:
-    git:
-      url: https://github.com/xhns/torrent_model.git
+    path: ../torrent_model
